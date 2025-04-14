@@ -20,9 +20,9 @@ GROUNDING_DINO_CONFIG = "grounding_dino/groundingdino/config/GroundingDINO_SwinT
 GROUNDING_DINO_CHECKPOINT = "gdino_checkpoints/groundingdino_swint_ogc.pth"
 BOX_THRESHOLD = 0.35
 TEXT_THRESHOLD = 0.25
-VIDEO_PATH = "./assets/hippopotamus.mp4"
-TEXT_PROMPT = "hippopotamus."
-OUTPUT_VIDEO_PATH = "./hippopotamus_tracking_demo.mp4"
+VIDEO_PATH = "./assets/vecteezy_play-snooker-on-holiday-and-meeting_16822541.mp4"
+TEXT_PROMPT = "man <and> snooker ball <and> snooker table"
+OUTPUT_VIDEO_DIR = "./outputs"
 SOURCE_VIDEO_FRAME_DIR = "./custom_video_frames"
 SAVE_TRACKING_RESULTS_DIR = "./tracking_results"
 PROMPT_TYPE_FOR_VIDEO = "box" # choose from ["point", "box", "mask"]
@@ -217,4 +217,10 @@ for frame_idx, segments in video_segments.items():
 Step 6: Convert the annotated frames to video
 """
 
+
+video_name = VIDEO_PATH.split('/')[-1].split('.')[0]
+save_dir = os.path.join(OUTPUT_VIDEO_DIR, video_name)
+if not os.path.exists(save_dir):
+    os.makedirs(save_dir)
+OUTPUT_VIDEO_PATH = os.path.join(save_dir, f'{TEXT_PROMPT}.mp4')
 create_video_from_images(SAVE_TRACKING_RESULTS_DIR, OUTPUT_VIDEO_PATH)
