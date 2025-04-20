@@ -48,7 +48,7 @@ class MaskDictionaryModel:
             # print("label", label)
             name = label
             box = box # .numpy().tolist()
-            new_annotation = ObjectInfo(instance_id = final_index, mask = mask, class_name = name, x1 = box[0], y1 = box[1], x2 = box[2], y2 = box[3], logit=score)
+            new_annotation = ObjectInfo(instance_id = final_index, mask = mask, class_name = name, x1 = box[0], y1 = box[1], x2 = box[2], y2 = box[3], logit=score.item())
             anno_2d[final_index] = new_annotation
 
         # np.save(os.path.join(output_dir, output_file_name), mask_img.numpy().astype(np.uint16))
