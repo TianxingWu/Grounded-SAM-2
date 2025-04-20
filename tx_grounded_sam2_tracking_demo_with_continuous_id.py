@@ -148,6 +148,10 @@ for start_frame_idx in range(0, len(frame_names), step):
     input_boxes = results[0]["boxes"] # .cpu().numpy()
     # print("results[0]",results[0])
     OBJECTS = results[0]["labels"]
+    print("results[0]:-------------------------------------------")
+    print(results[0])
+    print("OBJECTS:-------------------------------------------")
+    print(OBJECTS)
     if input_boxes.shape[0] != 0:
         # prompt SAM 2 image predictor to get the mask for the object
         masks, scores, logits = image_predictor.predict(
