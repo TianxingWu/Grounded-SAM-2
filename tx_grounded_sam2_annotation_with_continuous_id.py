@@ -23,8 +23,8 @@ from datetime import datetime
 # from decord import VideoReader
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--thread-num", default=1)
-parser.add_argument("--thread-id", default=0)
+parser.add_argument("--thread-num", type=int, default=1)
+parser.add_argument("--thread-id", type=int, default=0)
 args = parser.parse_args()
 
 """
