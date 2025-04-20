@@ -22,7 +22,7 @@ Hyperparam for Ground and Tracking
 MODEL_ID = "IDEA-Research/grounding-dino-tiny"
 BOX_THRESHOLD = 0.35
 TEXT_THRESHOLD = 0.25
-SAMPLE_STEP = 20 # the step to sample frames for Grounding DINO predictor
+SAMPLE_STEP = 24 # the step to sample frames for Grounding DINO predictor
 VIDEO_PATH = "./assets/1cfea9a4a38ca59417b61720578d6ec60e6d85647935fa702f3aefa1568a3306-00000003-00000475.mp4"
 TEXT_PROMPT = "flag." # VERY important: text queries need to be lowercased + end with a dot
 OUTPUT_VIDEO_DIR = "./outputs"
@@ -136,8 +136,8 @@ for start_frame_idx in range(0, len(frame_names), step):
     results = processor.post_process_grounded_object_detection(
         outputs,
         inputs.input_ids,
-        box_threshold=0.25,
-        text_threshold=0.25,
+        box_threshold=BOX_THRESHOLD,
+        text_threshold=TEXT_THRESHOLD,
         target_sizes=[image.size[::-1]]
     )
 
@@ -243,4 +243,4 @@ Step 6: Draw the results and save the video
 """
 CommonUtils.draw_masks_and_box_with_supervision(video_dir, mask_data_dir, json_data_dir, result_dir)
 
-create_video_from_images_pyav(result_dir, output_video_path, frame_rate=15)
+create_video_from_images_pyav(result_dir, output_video_path, frame_rate=video_info.fps)
