@@ -17,7 +17,15 @@ from pathlib import Path
 from tqdm import tqdm
 import logging
 import shutil
+import math
+import argparse
+from datetime import datetime
 # from decord import VideoReader
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--thread-num", default=1)
+parser.add_argument("--thread-id", default=0)
+args = parser.parse_args()
 
 """
 Hyperparam for Ground and Tracking
@@ -65,17 +73,26 @@ processor = AutoProcessor.from_pretrained(model_id)
 grounding_model = AutoModelForZeroShotObjectDetection.from_pretrained(model_id).to(device)
 
 
-
-
-
-n_samples = 5
-
 # Read paths
 with open("/mnt/Text2Video/fanweichen/tx/dataset/mflow/good_clip_paths.txt", "r") as f:
     sub_clip_paths = [line.strip() for line in f]
 
-logging.basicConfig(filename='/mnt/Text2Video/fanweichen/tx/dataset/mflow/seg_202504210500.log', level=logging.INFO)
+########################### multi thread ####################
+TOTAL = len(sub_clip_paths)
+THREAD_NUM = args.thread_num
+SIZE = math.ceil(TOTAL/THREAD_NUM)
+ID = args.thread_id
+START = ID * SIZE
+END = min((ID+1) * SIZE, TOTAL)
+sub_clip_paths = sub_clip_paths[START:END]
+print(f"Thread {ID}: from clip {START} to clip {END} ")
+########################### multi thread ####################
 
+now = datetime.now()
+current_time = now.strftime(f"%Y%m%d%H%M")
+logging.basicConfig(filename=f'/mnt/Text2Video/fanweichen/tx/dataset/mflow/seg_{current_time}.log', level=logging.INFO)
+
+n_samples = -1 # for debug only
 for sub_clip_path in tqdm(sub_clip_paths[:n_samples]):
     try:
         part1, part2 = sub_clip_path.split('/clip_')
