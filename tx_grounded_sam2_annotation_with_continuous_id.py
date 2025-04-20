@@ -16,6 +16,7 @@ import copy
 from pathlib import Path
 from tqdm import tqdm
 import logging
+import shutil
 # from decord import VideoReader
 
 """
@@ -268,6 +269,7 @@ for sub_clip_path in tqdm(sub_clip_paths[:n_samples]):
 
             
 
+        shutil.rmtree(video_dir)
         logging.info(f"{sub_clip_path}")
     except Exception as e:
         logging.info(f"FAILED: {sub_clip_path} ({e})")
