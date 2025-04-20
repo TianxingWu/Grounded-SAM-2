@@ -93,7 +93,7 @@ output_dir = OUTPUT_VIDEO_DIR
 # 'output_video_path' is the path to save the final video
 
 video_name = VIDEO_PATH.split('/')[-1].split('.')[0]
-output_video_path = os.path.join(OUTPUT_VIDEO_DIR, video_name)
+output_video_path = os.path.join(OUTPUT_VIDEO_DIR, video_name, f'{TEXT_PROMPT}.mp4')
 # create the output directory
 CommonUtils.creat_dirs(output_dir)
 mask_data_dir = os.path.join(output_dir, video_name, "mask_data")
