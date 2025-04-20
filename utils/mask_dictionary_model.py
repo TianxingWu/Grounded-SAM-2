@@ -9,8 +9,8 @@ from dataclasses import dataclass, field
 @dataclass
 class MaskDictionaryModel:
     mask_name:str = ""
-    mask_height: int = 1080
-    mask_width:int = 1920
+    mask_height: int = 288
+    mask_width:int = 512
     promote_type:str = "mask"
     labels:dict = field(default_factory=dict)
 
