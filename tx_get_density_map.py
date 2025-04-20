@@ -74,7 +74,7 @@ def write_video(
 with open("/mnt/Text2Video/fanweichen/tx/dataset/mflow/good_clip_paths.txt", "r") as f:
     sub_clip_paths = [line.strip() for line in f]
 
-n_samples = 5 # for debug only
+n_samples = 100 # for debug only
 VISUALIZE = True
 
 bad_list = []
@@ -141,7 +141,8 @@ for sub_clip_path in tqdm(sub_clip_paths[:n_samples]):
             video_path = f'/mnt/Text2Video/fanweichen/tx/dataset/mflow/4DGen-Dataset-tx/Human_Raw_Data/pexels/{part1_segs[1]}/{part1_seg2_prefix}/{part1_seg2}.mp4'
             video_info = sv.VideoInfo.from_video_path(video_path)  # get video info
             write_video(os.path.join(save_dir, 'density_map.mp4'), rho_uint8_rgb, video_info.fps)
-
+        
+        logging.info(f"{sub_clip_path}")
     except Exception as e:
         logging.info(f"FAILED: {sub_clip_path} ({e})")
         
