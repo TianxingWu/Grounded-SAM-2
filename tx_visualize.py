@@ -18,14 +18,15 @@ def create_bw_video_from_masks_pyav(mask_path, output_path, fps=10):
     stream = container.add_stream('libx264', rate=fps)
     stream.width = width
     stream.height = height
-    stream.pix_fmt = 'rgb24'
+    stream.pix_fmt = 'yuv420p'
 
     for filename in mask_files:
         mask = np.load(os.path.join(mask_path, filename))
         # Create white/black RGB frame
         bw = np.where(mask > 0, 255, 0).astype(np.uint8)
         rgb = np.stack([bw]*3, axis=-1)  # Convert to (H, W, 3)
-        frame = av.VideoFrame.from_ndarray(rgb, format='rgb24')
+        frame = av.VideoFrame.from_ndarray(rgb, format='rgb24')  # still create RGB frame
+        frame = frame.reformat(format='yuv420p')  # convert to yuv420p
         packet = stream.encode(frame)
         if packet:
             container.mux(packet)
