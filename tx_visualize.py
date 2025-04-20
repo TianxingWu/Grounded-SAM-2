@@ -23,7 +23,8 @@ def create_bw_video_from_masks_pyav(mask_path, output_path, fps=10):
     for filename in mask_files:
         mask = np.load(os.path.join(mask_path, filename))
         # Create white/black RGB frame
-        rgb = np.where(mask[..., None] > 0, 255, 0).astype(np.uint8)
+        bw = np.where(mask > 0, 255, 0).astype(np.uint8)
+        rgb = np.stack([bw]*3, axis=-1)  # Convert to (H, W, 3)
         frame = av.VideoFrame.from_ndarray(rgb, format='rgb24')
         packet = stream.encode(frame)
         if packet:
