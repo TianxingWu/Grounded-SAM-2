@@ -20,8 +20,15 @@ GROUNDING_DINO_CONFIG = "grounding_dino/groundingdino/config/GroundingDINO_SwinT
 GROUNDING_DINO_CHECKPOINT = "gdino_checkpoints/groundingdino_swint_ogc.pth"
 BOX_THRESHOLD = 0.35
 TEXT_THRESHOLD = 0.25
-VIDEO_PATH = "./assets/vecteezy_play-snooker-on-holiday-and-meeting_16822541.mp4"
-TEXT_PROMPT = "man <and> snooker ball <and> snooker table"
+# VIDEO_PATH = "./assets/vecteezy_play-snooker-on-holiday-and-meeting_16822541.mp4"
+# # TEXT_PROMPT = "man <and> snooker ball <and> snooker table"
+# TEXT_PROMPT = "man.snooker ball.snooker table"
+
+VIDEO_PATH = "./assets/0aaeb84511873d7afe4e336b3290d26c665b66c306d2da8868ffda76863fa8b8-00000959-00001040.mp4"
+# TEXT_PROMPT = "building <and> car <and> flag <and> cloud"
+TEXT_PROMPT = "double-decker bus.wet pavement"
+
+
 OUTPUT_VIDEO_DIR = "./outputs"
 SOURCE_VIDEO_FRAME_DIR = "./custom_video_frames"
 SAVE_TRACKING_RESULTS_DIR = "./tracking_results"
