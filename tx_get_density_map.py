@@ -104,6 +104,7 @@ for sub_clip_path in tqdm(sub_clip_paths[:n_samples]):
 
         seg_dir = sub_clip_path.replace('pexelx_st', '/mnt/Text2Video/fanweichen/tx/dataset/mflow/4DGen-Dataset-tx/pexelx_seg')
         save_dir = sub_clip_path.replace('pexelx_st', '/mnt/Text2Video/fanweichen/tx/dataset/mflow/4DGen-Dataset-tx/pexelx_density_maps')
+        os.makedirs(save_dir, exist_ok=True)
 
         for obj_name, obj_density in zip(obj_names, obj_densities):
             try:
