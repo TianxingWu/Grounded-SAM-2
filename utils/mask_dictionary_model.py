@@ -34,6 +34,27 @@ class MaskDictionaryModel:
         self.mask_height = mask_img.shape[0]
         self.mask_width = mask_img.shape[1]
         self.labels = anno_2d
+    
+    def add_new_frame_annotation_tx(self, mask_list, box_list, label_list, score_list, background_value = 0):
+        mask_img = torch.zeros(mask_list.shape[-2:])
+        anno_2d = {}
+        for idx, (mask, box, label, score) in enumerate(zip(mask_list, box_list, label_list, score_list)):
+            final_index = background_value + idx + 1
+
+            if mask.shape[0] != mask_img.shape[0] or mask.shape[1] != mask_img.shape[1]:
+                raise ValueError("The mask shape should be the same as the mask_img shape.")
+            # mask = mask
+            mask_img[mask == True] = final_index
+            # print("label", label)
+            name = label
+            box = box # .numpy().tolist()
+            new_annotation = ObjectInfo(instance_id = final_index, mask = mask, class_name = name, x1 = box[0], y1 = box[1], x2 = box[2], y2 = box[3], logit=score)
+            anno_2d[final_index] = new_annotation
+
+        # np.save(os.path.join(output_dir, output_file_name), mask_img.numpy().astype(np.uint16))
+        self.mask_height = mask_img.shape[0]
+        self.mask_width = mask_img.shape[1]
+        self.labels = anno_2d
 
     def update_masks(self, tracking_annotation_dict, iou_threshold=0.8, objects_count=0):
         updated_masks = {}

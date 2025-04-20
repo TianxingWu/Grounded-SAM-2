@@ -148,10 +148,11 @@ for start_frame_idx in range(0, len(frame_names), step):
     input_boxes = results[0]["boxes"] # .cpu().numpy()
     # print("results[0]",results[0])
     OBJECTS = results[0]["labels"]
-    print("results[0]:-------------------------------------------")
-    print(results[0])
-    print("OBJECTS:-------------------------------------------")
-    print(OBJECTS)
+    SCORES = results[0]["scores"]
+    # print("results[0]:-------------------------------------------")
+    # print(results[0])
+    # print("OBJECTS:-------------------------------------------")
+    # print(OBJECTS)
     if input_boxes.shape[0] != 0:
         # prompt SAM 2 image predictor to get the mask for the object
         masks, scores, logits = image_predictor.predict(
@@ -174,7 +175,7 @@ for start_frame_idx in range(0, len(frame_names), step):
 
         # If you are using point prompts, we uniformly sample positive points based on the mask
         if mask_dict.promote_type == "mask":
-            mask_dict.add_new_frame_annotation(mask_list=torch.tensor(masks).to(device), box_list=torch.tensor(input_boxes), label_list=OBJECTS)
+            mask_dict.add_new_frame_annotation_tx(mask_list=torch.tensor(masks).to(device), box_list=torch.tensor(input_boxes), label_list=OBJECTS, score_list=SCORES)
         else:
             raise NotImplementedError("SAM 2 video predictor only support mask prompts")
 
