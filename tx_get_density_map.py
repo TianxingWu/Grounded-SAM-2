@@ -75,6 +75,7 @@ with open("/mnt/Text2Video/fanweichen/tx/dataset/mflow/good_clip_paths.txt", "r"
     sub_clip_paths = [line.strip() for line in f]
 
 n_samples = 100 # for debug only
+SAVE_NP = False
 VISUALIZE = True
 
 bad_list = []
@@ -121,11 +122,13 @@ for sub_clip_path in tqdm(sub_clip_paths[:n_samples]):
             except:
                 bad_list.append(f"{meta_path}\t{obj_name}")
         
-        np.save(os.path.join(save_dir, 'density_map.npy'), rho_tensor)
+        if SAVE_NP:
+            np.save(os.path.join(save_dir, 'density_map.npy'), rho_tensor)
 
         if VISUALIZE:
             # dummy normalize:
-            rho_min = rho_tensor.min()
+            # rho_min = rho_tensor.min()
+            rho_min = 0
             rho_max = rho_tensor.max()
 
             if rho_max > rho_min:
