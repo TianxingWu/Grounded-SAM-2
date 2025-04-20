@@ -96,7 +96,7 @@ for sub_clip_path in tqdm(sub_clip_paths[:n_samples]):
         """
         video_info = sv.VideoInfo.from_video_path(video_path)  # get video info
         print(video_info)
-        frame_generator = sv.get_video_frames_generator(video_path, stride=1, start=start_idx, end=end_idx)
+        frame_generator = sv.get_video_frames_generator(video_path, stride=1, start=start_idx, end=end_idx+1)
         # saving video to frames
         source_frames = Path(SOURCE_VIDEO_FRAME_DIR)
         source_frames.mkdir(parents=True, exist_ok=True)
