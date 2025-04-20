@@ -93,7 +93,7 @@ current_time = now.strftime(f"%Y%m%d%H%M")
 logging.basicConfig(filename=f'/mnt/Text2Video/fanweichen/tx/dataset/mflow/seg_{current_time}.log', level=logging.INFO)
 
 n_samples = -1 # for debug only
-for sub_clip_path in tqdm(sub_clip_paths[:n_samples]):
+for sub_clip_path in tqdm(sub_clip_paths[:n_samples], desc=f"THREAD {ID}/{THREAD_NUM}"):
     try:
         part1, part2 = sub_clip_path.split('/clip_')
         start_idx, end_idx = part2.split('.')[0].split('-')
