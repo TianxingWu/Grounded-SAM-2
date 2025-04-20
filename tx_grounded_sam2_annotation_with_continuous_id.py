@@ -16,7 +16,7 @@ import copy
 from pathlib import Path
 from tqdm import tqdm
 import logging
-from decord import VideoReader
+# from decord import VideoReader
 
 """
 Hyperparam for Ground and Tracking
