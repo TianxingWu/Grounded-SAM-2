@@ -7,6 +7,7 @@ import json
 from typing import Optional, Dict, Any
 import logging
 from datetime import datetime
+import supervision as sv
 
 
 def write_video(
@@ -136,7 +137,9 @@ for sub_clip_path in tqdm(sub_clip_paths[:n_samples]):
             # Scale to [0, 255] and convert to uint8
             rho_uint8 = (rho_normalized * 255).astype(np.uint8)
 
-            write_video(os.path.join(save_dir, 'density_map.mp4'), rho_uint8)
+            video_path = f'/mnt/Text2Video/fanweichen/tx/dataset/mflow/4DGen-Dataset-tx/Human_Raw_Data/pexels/{part1_segs[1]}/{part1_seg2_prefix}/{part1_seg2}.mp4'
+            video_info = sv.VideoInfo.from_video_path(video_path)  # get video info
+            write_video(os.path.join(save_dir, 'density_map.mp4'), rho_uint8, video_info.fps)
 
     except Exception as e:
         logging.info(f"FAILED: {sub_clip_path} ({e})")
