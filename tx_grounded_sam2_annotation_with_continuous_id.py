@@ -30,7 +30,7 @@ args = parser.parse_args()
 """
 Hyperparam for Ground and Tracking
 """
-GPU_ID = 0
+GPU_ID = args.thread_id
 MODEL_ID = "IDEA-Research/grounding-dino-tiny"
 BOX_THRESHOLD = 0.35
 TEXT_THRESHOLD = 0.25
