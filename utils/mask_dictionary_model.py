@@ -73,6 +73,7 @@ class MaskDictionaryModel:
                     new_mask_copy.mask = seg_mask.mask
                     new_mask_copy.instance_id = object_info.instance_id
                     new_mask_copy.class_name = seg_mask.class_name
+                    new_mask_copy.logit = seg_mask.logit
                     break
                 
             if not flag:
@@ -81,6 +82,7 @@ class MaskDictionaryModel:
                 new_mask_copy.instance_id = objects_count
                 new_mask_copy.mask = seg_mask.mask
                 new_mask_copy.class_name = seg_mask.class_name
+                new_mask_copy.logit = seg_mask.logit
             updated_masks[flag] = new_mask_copy
         self.labels = updated_masks
         return objects_count
