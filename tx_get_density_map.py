@@ -9,6 +9,8 @@ import logging
 from datetime import datetime
 import supervision as sv
 
+MEAN = 1312.4470826746422
+STD = 1590.2746111420413
 
 def write_video(
     filename: str,
@@ -126,19 +128,24 @@ for sub_clip_path in tqdm(sub_clip_paths[:n_samples]):
             np.save(os.path.join(save_dir, 'density_map.npy'), rho_tensor)
 
         if VISUALIZE:
-            # dummy normalize:
-            # rho_min = rho_tensor.min()
-            rho_min = 0
-            rho_max = rho_tensor.max()
+            # # dummy normalize:
+            # # rho_min = rho_tensor.min()
+            # rho_min = 0
+            # rho_max = rho_tensor.max()
 
-            if rho_max > rho_min:
-                rho_normalized = (rho_tensor - rho_min) / (rho_max - rho_min)
-            else:
-                # all values are the same, normalize to mid-gray (128) or white (255)
-                rho_normalized = 0.5*np.ones_like(rho_tensor)  # or 0.5 * np.ones_like(...)
+            # if rho_max > rho_min:
+            #     rho_normalized = (rho_tensor - rho_min) / (rho_max - rho_min)
+            # else:
+            #     # all values are the same, normalize to mid-gray (128) or white (255)
+            #     rho_normalized = 0.5*np.ones_like(rho_tensor)  # or 0.5 * np.ones_like(...)
+            # # Scale to [0, 255] and convert to uint8
+            # rho_uint8 = (rho_normalized * 255).astype(np.uint8)
 
-            # Scale to [0, 255] and convert to uint8
-            rho_uint8 = (rho_normalized * 255).astype(np.uint8)
+            # mean std normalize + rescale + clamp
+            rho_normalized = (rho_tensor - MEAN) / STD
+            rescaled = 0.5 * (rho_normalized + 1)
+            rho_uint8 = np.clip(rescaled * 255, 0, 255).astype(np.uint8)
+            
             rho_uint8_rgb = np.repeat(rho_uint8, 3, axis=-1)
 
             video_path = f'/mnt/Text2Video/fanweichen/tx/dataset/mflow/4DGen-Dataset-tx/Human_Raw_Data/pexels/{part1_segs[1]}/{part1_seg2_prefix}/{part1_seg2}.mp4'
