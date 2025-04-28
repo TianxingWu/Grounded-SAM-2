@@ -9,8 +9,14 @@ import logging
 from datetime import datetime
 import supervision as sv
 
-MEAN = 1312.4470826746422
-STD = 1590.2746111420413
+# MEAN = 1312.4470826746422
+# STD = 1590.2746111420413
+
+# p1 = np.percentile(rho_log, 1)
+# p99 = np.percentile(rho_log, 99)
+# 1% - 99% log density
+P1 = 3.4
+P99 = 9.0
 
 def write_video(
     filename: str,
@@ -73,12 +79,12 @@ def write_video(
 
 
 # Read paths
-# with open("/mnt/Text2Video/fanweichen/tx/dataset/mflow/good_clip_paths.txt", "r") as f:
-with open("/mnt/Text2Video/fanweichen/tx/dataset/mflow/sampled_100_clip_paths.txt", "r") as f:
+with open("/mnt/Text2Video/fanweichen/tx/dataset/mflow/good_clip_paths.txt", "r") as f:
+# with open("/mnt/Text2Video/fanweichen/tx/dataset/mflow/sampled_100_clip_paths.txt", "r") as f:
     sub_clip_paths = [line.strip() for line in f]
 
-n_samples = 100 # for debug only
-SAVE_NP = False
+# n_samples = -1 # for debug only
+SAVE_NP = True
 VISUALIZE = True
 
 bad_list = []
@@ -87,7 +93,8 @@ now = datetime.now()
 current_time = now.strftime(f"%Y%m%d%H%M")
 logging.basicConfig(filename=f'/mnt/Text2Video/fanweichen/tx/dataset/mflow/rho_map_{current_time}.log', level=logging.INFO)
 
-for sub_clip_path in tqdm(sub_clip_paths[:n_samples]):
+# for sub_clip_path in tqdm(sub_clip_paths[:n_samples]):
+for sub_clip_path in tqdm(sub_clip_paths):
     try:
         part1, part2 = sub_clip_path.split('/clip_')
         start_idx, end_idx = part2.split('.')[0].split('-')
@@ -108,7 +115,7 @@ for sub_clip_path in tqdm(sub_clip_paths[:n_samples]):
         obj_densities = [obj['density'] for obj in meta['objects']]
 
         seg_dir = sub_clip_path.replace('pexelx_st', '/mnt/Text2Video/fanweichen/tx/dataset/mflow/4DGen-Dataset-tx/pexelx_seg')
-        save_dir = sub_clip_path.replace('pexelx_st', '/mnt/Text2Video/fanweichen/tx/dataset/mflow/4DGen-Dataset-tx/pexelx_density_maps')
+        save_dir = sub_clip_path.replace('pexelx_st', '/mnt/Text2Video/fanweichen/tx/dataset/mflow/4DGen-Dataset-tx/pexelx_density_maps_v2')
         os.makedirs(save_dir, exist_ok=True)
 
         for obj_name, obj_density in zip(obj_names, obj_densities):
@@ -126,26 +133,21 @@ for sub_clip_path in tqdm(sub_clip_paths[:n_samples]):
                 bad_list.append(f"{meta_path}\t{obj_name}")
         
         if SAVE_NP:
-            np.save(os.path.join(save_dir, 'density_map.npy'), rho_tensor)
+            # np.save(os.path.join(save_dir, 'density_map.npy'), rho_tensor)
+            np.savez_compressed(os.path.join(save_dir, 'density_map.npz'), rho_tensor.astype(np.float16))
+
 
         if VISUALIZE:
-            # # dummy normalize:
-            # # rho_min = rho_tensor.min()
-            # rho_min = 0
-            # rho_max = rho_tensor.max()
+            # log - percentile clip - minmax
+            rho_log = np.log1p(rho_tensor)
 
-            # if rho_max > rho_min:
-            #     rho_normalized = (rho_tensor - rho_min) / (rho_max - rho_min)
-            # else:
-            #     # all values are the same, normalize to mid-gray (128) or white (255)
-            #     rho_normalized = 0.5*np.ones_like(rho_tensor)  # or 0.5 * np.ones_like(...)
-            # # Scale to [0, 255] and convert to uint8
-            # rho_uint8 = (rho_normalized * 255).astype(np.uint8)
+            # p1 = np.percentile(rho_log, 1)
+            # p99 = np.percentile(rho_log, 99)
+            rho_log_clipped = np.clip(rho_log, P1, P99)
 
-            # mean std normalize + rescale + clamp
-            rho_normalized = (rho_tensor - MEAN) / STD
-            rescaled = 0.5 * (rho_normalized + 1)
-            rho_uint8 = np.clip(rescaled * 255, 0, 255).astype(np.uint8)
+            rho_log_clipped_minmax = (rho_log_clipped - P1) / (P99 - P1)
+
+            rho_uint8 = np.clip(rho_log_clipped_minmax * 255, 0, 255).astype(np.uint8)
             
             rho_uint8_rgb = np.repeat(rho_uint8, 3, axis=-1)
 
