@@ -27,6 +27,25 @@ parser.add_argument("--thread-num", type=int, default=1)
 parser.add_argument("--thread-id", type=int, default=0)
 args = parser.parse_args()
 
+# HAVE TO PUT THIS AT THE BEGINNING FOR LOGGING
+with open("/mnt/Text2Video/fanweichen/tx/dataset/mflow/sampled_100_clip_paths.txt", "r") as f:
+    sub_clip_paths = [line.strip() for line in f]
+
+########################### multi thread ####################
+TOTAL = len(sub_clip_paths)
+THREAD_NUM = args.thread_num
+SIZE = math.ceil(TOTAL/THREAD_NUM)
+ID = args.thread_id
+START = ID * SIZE
+END = min((ID+1) * SIZE, TOTAL)
+sub_clip_paths = sub_clip_paths[START:END]
+print(f"Thread {ID}: from clip {START} to clip {END} ")
+########################### multi thread ####################
+
+now = datetime.now()
+current_time = now.strftime(f"%Y%m%d%H%M")
+logging.basicConfig(filename=f'/mnt/Text2Video/fanweichen/tx/dataset/mflow/seg_{current_time}_thread{ID}.log', level=logging.INFO)
+
 """
 Hyperparam for Ground and Tracking
 """
@@ -115,24 +134,6 @@ def run_florence2(task_prompt, text_input, model, processor, image):
 """
 Main Function
 """
-
-with open("/mnt/Text2Video/fanweichen/tx/dataset/mflow/sampled_100_clip_paths.txt", "r") as f:
-    sub_clip_paths = [line.strip() for line in f]
-
-########################### multi thread ####################
-TOTAL = len(sub_clip_paths)
-THREAD_NUM = args.thread_num
-SIZE = math.ceil(TOTAL/THREAD_NUM)
-ID = args.thread_id
-START = ID * SIZE
-END = min((ID+1) * SIZE, TOTAL)
-sub_clip_paths = sub_clip_paths[START:END]
-print(f"Thread {ID}: from clip {START} to clip {END} ")
-########################### multi thread ####################
-
-now = datetime.now()
-current_time = now.strftime(f"%Y%m%d%H%M")
-logging.basicConfig(filename=f'/mnt/Text2Video/fanweichen/tx/dataset/mflow/seg_{current_time}_thread{ID}.log', level=logging.INFO)
 
 # n_samples = -1 # for debug only
 # for sub_clip_path in tqdm(sub_clip_paths[:n_samples], desc=f"THREAD {ID}/{THREAD_NUM}"):
