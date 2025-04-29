@@ -190,7 +190,7 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
         segmentation_maps = []
         for i, frame in enumerate(frames):
             # run florence-2 object detection in current demo
-            image = Image.fromarray(frame.asnumpy())  
+            image = Image.fromarray(frame)  
             results = run_florence2(
                 task_prompt, 
                 text_input, 
@@ -279,7 +279,7 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
             binary_masks = torch.stack([seg_map == i for i in range(num_classes)])  # [num_classes, H, W]
             # remove background mask
             binary_masks = binary_masks[1:]
-            frame = torch.from_numpy(frames[t].asnumpy()).permute(2, 0, 1)
+            frame = torch.from_numpy(frames[t]).permute(2, 0, 1)
             # convert to uint8
             frame = (frame * 255).to(torch.uint8)
             # draw segmentation masks on the frame
