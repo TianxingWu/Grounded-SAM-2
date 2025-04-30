@@ -215,7 +215,7 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
         results = results[task_prompt]
         # parse florence-2 detection results
         input_boxes = np.array(results["bboxes"])
-        print(results)
+        # print(results)
         class_names = results["bboxes_labels"] # there will be repeated class names in the list
         # class_ids = np.array(list(range(len(class_names))))
 
@@ -248,7 +248,7 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
 
         # Loop over all classes and assign where mask is True
         for obj_index in range(C):
-            obj_mask = masks[obj_index]  # shape [H, W], bool
+            obj_mask = masks[obj_index].astype(bool)  # shape [H, W], bool
             obj_name = class_names[obj_index]
             segmentation_map[obj_mask] = name2id[obj_name] # won't change dtype
         
@@ -264,7 +264,7 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
     
     # save segmentation map
     seg_map_path = os.path.join(output_dir, f"segmentation_map.npz")
-    np.savez_compressed(seg_map_path, segmentation_maps.astype(np.uint8))
+    np.savez_compressed(seg_map_path, segmentation_map=segmentation_maps.astype(np.uint8))
 
     # save id2name dict
     json_path = os.path.join(output_dir, f"id2name.json")
@@ -279,15 +279,13 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
         binary_masks = torch.stack([seg_map == i for i in range(num_classes)])  # [num_classes, H, W]
         # remove background mask
         binary_masks = binary_masks[1:]
-        frame = torch.from_numpy(frames[t]).permute(2, 0, 1)
-        # convert to uint8
-        frame = (frame * 255).to(torch.uint8)
+        frame = torch.from_numpy(frames[t]).permute(2, 0, 1) # uint8
         # draw segmentation masks on the frame
         color_mask = draw_segmentation_masks(frame, binary_masks, alpha=0.6)
         video_tensor.append(color_mask)
 
     video_tensor = torch.stack(video_tensor)  # [T, 3, H, W]
-    write_video(os.path.join(output_dir, f"segmentation_viz.mp4"), video_tensor.permute(0, 2, 3, 1), fps=orig_fps)
+    write_video(os.path.join(output_dir, f"segmentation_viz.mp4"), video_tensor.permute(0, 2, 3, 1), fps=int(np.round(orig_fps)), options = {"crf": "17"})
     # write_video('seg_map_video.mp4', video_tensor.permute(0,2,3,1), fps=10)
 
     #     logging.info(f"{sub_clip_path}")
