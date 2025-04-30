@@ -124,7 +124,9 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
             overwrite=True, 
             image_name_pattern="{:04d}.jpg"
         ) as sink:
-            for frame in tqdm(frame_generator, desc="Saving Video Frames"):
+            # for frame in tqdm(frame_generator, desc="Saving Video Frames"):
+            #     sink.save_image(frame)
+            for frame in frame_generator:
                 sink.save_image(frame)
         video_dir = SOURCE_VIDEO_FRAME_DIR
 
