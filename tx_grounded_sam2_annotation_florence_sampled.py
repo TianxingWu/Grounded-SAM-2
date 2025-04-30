@@ -260,7 +260,7 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
             results = results[task_prompt]
             # parse florence-2 detection results
             input_boxes = np.array(results["bboxes"])
-            # print(results)
+            print(results)
             class_names = results["bboxes_labels"] # there will be repeated class names in the list
             # class_ids = np.array(list(range(len(class_names))))
 
