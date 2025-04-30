@@ -7,6 +7,8 @@ from tqdm import tqdm
 import os
 import av
 import supervision as sv
+from typing import Optional, Dict, Any
+
 
 P1 = 3.4
 P99 = 9.0
