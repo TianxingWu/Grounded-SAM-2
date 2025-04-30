@@ -34,7 +34,7 @@ GPU_ID = args.thread_id
 MODEL_ID = "IDEA-Research/grounding-dino-tiny"
 BOX_THRESHOLD = 0.35
 TEXT_THRESHOLD = 0.25
-SAMPLE_STEP = 8 # the step to sample frames for Grounding DINO predictor
+SAMPLE_STEP = 1 # the step to sample frames for Grounding DINO predictor
 VIDEO_PATH = "./assets/1cfea9a4a38ca59417b61720578d6ec60e6d85647935fa702f3aefa1568a3306-00000003-00000475.mp4"
 # TEXT_PROMPT = "car." # VERY important: text queries need to be lowercased + end with a dot
 # OUTPUT_VIDEO_DIR = "./outputs"
@@ -141,7 +141,7 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
             text = f"{obj_name.lower()}."
 
             # output_dir = sub_clip_path.replace('pexelx_st', '/mnt/Text2Video/fanweichen/tx/dataset/mflow/4DGen-Dataset-tx/pexelx_seg') # ....clip_xxx-xxx.mp4/
-            output_dir = sub_clip_path.replace('pexelx_st', '/mnt/Text2Video/fanweichen/tx/dataset/mflow/4DGen-Dataset-tx-sampled-100/pexelx_seg') # ....clip_xxx-xxx.mp4/
+            output_dir = sub_clip_path.replace('pexelx_st', f'/mnt/Text2Video/fanweichen/tx/dataset/mflow/4DGen-Dataset-tx-sampled-100/pexelx_seg_v2_step{SAMPLE_STEP}') # ....clip_xxx-xxx.mp4/
 
             # create the output directory
             CommonUtils.creat_dirs(output_dir)
