@@ -141,11 +141,14 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
             output_dir = sub_clip_path.replace('pexelx_st', f'/mnt/Text2Video2/fanweichen/tx/dataset/mflow/4DGen-Dataset-tx/pexelx_seg_v2_step{SAMPLE_STEP}') # ....clip_xxx-xxx.mp4/
 
             # create the output directory
-            CommonUtils.creat_dirs(output_dir)
+            # CommonUtils.creat_dirs(output_dir)
+            os.makedirs(output_dir, exist_ok=True)
             mask_data_dir = os.path.join(output_dir, obj_name, "mask_data")
             json_data_dir = os.path.join(output_dir, obj_name, "json_data")
-            CommonUtils.creat_dirs(mask_data_dir)
-            CommonUtils.creat_dirs(json_data_dir)
+            # CommonUtils.creat_dirs(mask_data_dir)
+            # CommonUtils.creat_dirs(json_data_dir)
+            os.makedirs(mask_data_dir, exist_ok=True)
+            os.makedirs(json_data_dir, exist_ok=True)
 
             # scan all the JPEG frame names in this directory
             frame_names = [
