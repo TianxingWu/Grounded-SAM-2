@@ -296,7 +296,7 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
     """
     Save segmentation map and json file
     """
-    output_dir = sub_clip_path.replace('pexelx_st', '/mnt/Text2Video/fanweichen/tx/dataset/mflow/4DGen-Dataset-tx-sampled-100/pexelx_seg_florence_dense') # ....clip_xxx-xxx.mp4/
+    output_dir = sub_clip_path.replace('pexelx_st', '/mnt/Text2Video/fanweichen/tx/dataset/mflow/4DGen-Dataset-tx-sampled-100/pexelx_seg_florence_phrasegd') # ....clip_xxx-xxx.mp4/
     os.makedirs(output_dir, exist_ok=True)
     
     # save segmentation map
