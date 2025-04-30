@@ -179,7 +179,8 @@ Main Function
 
 debug_set = {
     '0e86a32cba878987bf21d64d966a892d3c90ea8f1acec91a326b4d4dac93a0d1-00000481-00000668',
-    '98cf4ea323deb72fe62b9d48da28f6f00a4ed4fef0d13653e96438b6d753395f-00000481-00000588'
+    '98cf4ea323deb72fe62b9d48da28f6f00a4ed4fef0d13653e96438b6d753395f-00000481-00000588',
+    '166c93ace6b071e6d5add7437e9d5c1307153d28313f9df065686d353fab03e3-00000003-00000474'
 }
 for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
     if sub_clip_path.split('/')[2] not in debug_set:
@@ -251,7 +252,7 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
         # parse florence-2 detection results
         input_boxes = np.array(results["bboxes"])
         print(results)
-        class_names = results["bboxes_labels"] # there will be repeated class names in the list
+        class_names = results["labels"] # there will be repeated class names in the list
 
         for name in class_names:
             if name not in name2id:
