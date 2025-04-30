@@ -279,7 +279,7 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
         masks, scores, logits = sam2_predictor.predict(
             point_coords=None,
             point_labels=None,
-            mask_input=masks,
+            mask_input=logits,
             multimask_output=False,
         )
         
