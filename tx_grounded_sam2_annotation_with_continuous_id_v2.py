@@ -47,7 +47,7 @@ print(f"Thread {ID}: from clip {START} to clip {END} ")
 
 now = datetime.now()
 current_time = now.strftime(f"%Y%m%d%H%M")
-logging.basicConfig(filename=f'/mnt/Text2Video2/fanweichen/tx/dataset/mflow/seg_{current_time}.log', level=logging.INFO)
+logging.basicConfig(filename=f'/mnt/Text2Video2/fanweichen/tx/dataset/mflow/seg_{current_time}_{THREAD_NUM}_{ID}.log', level=logging.INFO)
 
 
 """
