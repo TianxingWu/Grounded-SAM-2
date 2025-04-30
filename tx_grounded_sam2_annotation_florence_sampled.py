@@ -176,8 +176,14 @@ Main Function
 
 # n_samples = -1 # for debug only
 # for sub_clip_path in tqdm(sub_clip_paths[:n_samples], desc=f"THREAD {ID}/{THREAD_NUM}"):
-for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
 
+debug_set = {
+    '0e86a32cba878987bf21d64d966a892d3c90ea8f1acec91a326b4d4dac93a0d1-00000481-00000668',
+    '98cf4ea323deb72fe62b9d48da28f6f00a4ed4fef0d13653e96438b6d753395f-00000481-00000588'
+}
+for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
+    if sub_clip_path.split('/')[2] not in debug_set:
+        continue
     try:
         """
         load video and object info
