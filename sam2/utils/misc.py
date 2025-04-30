@@ -114,7 +114,7 @@ class AsyncVideoFrameLoader:
         img_mean,
         img_std,
         compute_device,
-        verbose=False,
+        verbose=True,
     ):
         self.img_paths = img_paths
         self.image_size = image_size
@@ -137,9 +137,6 @@ class AsyncVideoFrameLoader:
         # load the rest of frames asynchronously without blocking the session start
         def _load_frames():
             try:
-                print("DEBUG 1 ===============================================")
-                if verbose:
-                    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 for n in (tqdm(range(len(self.images)), desc="frame loading (JPEG)") if verbose else range(len(self.images))):
                     self.__getitem__(n)
             except Exception as e:
@@ -208,6 +205,7 @@ def load_video_frames(
             img_std=img_std,
             async_loading_frames=async_loading_frames,
             compute_device=compute_device,
+            verbose=verbose,
         )
     else:
         raise NotImplementedError(
@@ -260,7 +258,6 @@ def load_video_frames_from_jpg_images(
     img_std = torch.tensor(img_std, dtype=torch.float32)[:, None, None]
 
     if async_loading_frames:
-        print(f"DEBUG 2 ==============================================={verbose}")
         lazy_images = AsyncVideoFrameLoader(
             img_paths,
             image_size,
@@ -273,9 +270,6 @@ def load_video_frames_from_jpg_images(
         return lazy_images, lazy_images.video_height, lazy_images.video_width
 
     images = torch.zeros(num_frames, 3, image_size, image_size, dtype=torch.float32)
-    print("DEBUG 0 ===============================================")
-    if verbose:
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     for n, img_path in enumerate(tqdm(img_paths, desc="frame loading (JPEG)") if verbose else img_paths):
         images[n], video_height, video_width = _load_img_as_tensor(img_path, image_size)
     if not offload_video_to_cpu:
