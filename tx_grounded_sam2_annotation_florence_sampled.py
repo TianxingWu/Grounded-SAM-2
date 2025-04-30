@@ -222,13 +222,13 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
         meta_path = f'/mnt/Text2Video/fanweichen/tx/dataset/mflow/4DGen-Dataset-tx/pexelx_gpt/{part1_segs[1]}/{part1_seg2}/properties.json'
         with open(meta_path, 'r') as file:
             meta = json.load(file)
-        # obj_names = [obj['name'] for obj in meta['objects']]
-        obj_names = ['person' if obj['name'] == 'human' else obj['name'] for obj in meta['objects']] # replace human with person
-        text_input = " <and> ".join(obj_names)
-
+        obj_names = [obj['name'] for obj in meta['objects']]
         # calculate a dict for class names and ids
         name2id = {name: i+1 for i, name in enumerate(obj_names)}
         id2name = {v: k for k, v in name2id.items()}
+
+        prompts = ['person' if name == 'human' else name for name in obj_names] # replace human with person
+        text_input = " <and> ".join(prompts)
 
         """
         Process frames with florence-2 and sam2
