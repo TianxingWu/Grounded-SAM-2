@@ -222,7 +222,8 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
         meta_path = f'/mnt/Text2Video/fanweichen/tx/dataset/mflow/4DGen-Dataset-tx/pexelx_gpt/{part1_segs[1]}/{part1_seg2}/properties.json'
         with open(meta_path, 'r') as file:
             meta = json.load(file)
-        obj_names = [obj['name'] for obj in meta['objects']]
+        # obj_names = [obj['name'] for obj in meta['objects']]
+        obj_names = ['person' if obj['name'] == 'human' else obj['name'] for obj in meta['objects']] # replace human with person
         text_input = " <and> ".join(obj_names)
 
         # calculate a dict for class names and ids
@@ -262,6 +263,7 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
             input_boxes = np.array(results["bboxes"])
             print(results)
             class_names = results["bboxes_labels"] # there will be repeated class names in the list
+            class_names = ['human' if name == 'person' else name for name in class_names] # replace back human with person
             # class_ids = np.array(list(range(len(class_names))))
 
             # # get class id for each obj bbox result
