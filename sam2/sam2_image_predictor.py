@@ -412,6 +412,7 @@ class SAM2ImagePredictor:
         # Predict masks
         batched_mode = (
             concat_points is not None and concat_points[0].shape[0] > 1
+            or mask_input is not None and mask_input.shape[0] > 1 # patch, maybe buggy!
         )  # multi object prediction
         high_res_features = [
             feat_level[img_idx].unsqueeze(0)
