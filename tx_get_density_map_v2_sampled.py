@@ -138,7 +138,7 @@ for sub_clip_path in tqdm(sub_clip_paths):
         
         if SAVE_NP:
             # np.save(os.path.join(save_dir, 'density_map.npy'), rho_tensor)
-            np.savez_compressed(os.path.join(save_dir, 'density_map.npz'), rho_tensor.astype(np.float16))
+            np.savez_compressed(os.path.join(save_dir, 'density_map.npz'), density_map = rho_tensor.astype(np.float16))
 
 
         if VISUALIZE:
