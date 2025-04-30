@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=6 python tx_grounded_sam2_annotation_with_continuous_id_v2.py --thread-num 8 --thread-id 6
