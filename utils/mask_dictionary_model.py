@@ -108,7 +108,7 @@ class MaskDictionaryModel:
         return iou
 
 
-    def save_empty_mask_and_json(self, mask_data_dir, json_data_dir, image_name_list=None):
+    def save_empty_mask_and_json(self, mask_data_dir, json_data_dir, image_name_list=None, verbose=True):
         mask_img = torch.zeros((self.mask_height, self.mask_width))
         if image_name_list:
             for image_base_name in image_name_list:
@@ -117,12 +117,14 @@ class MaskDictionaryModel:
                 np.save(os.path.join(mask_data_dir, mask_name), mask_img.numpy().astype(np.uint16))
 
                 json_data_path = os.path.join(json_data_dir, mask_name.replace(".npy", ".json"))
-                print("save_empty_mask_and_json", json_data_path)
+                if verbose:
+                    print("save_empty_mask_and_json", json_data_path)
                 self.to_json(json_data_path)
         else:
             np.save(os.path.join(mask_data_dir, self.mask_name), mask_img.numpy().astype(np.uint16))
             json_data_path = os.path.join(json_data_dir, self.mask_name.replace(".npy", ".json"))
-            print("save_empty_mask_and_json", json_data_path)
+            if verbose:
+                print("save_empty_mask_and_json", json_data_path)
             self.to_json(json_data_path)
 
 

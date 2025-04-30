@@ -235,7 +235,7 @@ for sub_clip_path in tqdm(sub_clip_paths, desc=f"THREAD {ID}/{THREAD_NUM}"):
 
                 
                 if len(mask_dict.labels) == 0:
-                    mask_dict.save_empty_mask_and_json(mask_data_dir, json_data_dir, image_name_list = frame_names[start_frame_idx:start_frame_idx+step])
+                    mask_dict.save_empty_mask_and_json(mask_data_dir, json_data_dir, image_name_list = frame_names[start_frame_idx:start_frame_idx+step], verbose=False)
                     # print("No object detected in the frame, skip the frame {}".format(start_frame_idx))
                     continue
                 else: 

@@ -114,7 +114,7 @@ class AsyncVideoFrameLoader:
         img_mean,
         img_std,
         compute_device,
-        verbose,
+        verbose=False,
     ):
         self.img_paths = img_paths
         self.image_size = image_size
@@ -260,6 +260,7 @@ def load_video_frames_from_jpg_images(
     img_std = torch.tensor(img_std, dtype=torch.float32)[:, None, None]
 
     if async_loading_frames:
+        print(f"DEBUG 2 ==============================================={verbose}")
         lazy_images = AsyncVideoFrameLoader(
             img_paths,
             image_size,
